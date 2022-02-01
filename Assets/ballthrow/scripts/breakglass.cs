@@ -18,4 +18,14 @@ public class breakglass : MonoBehaviour
 
        
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "ball")
+        {
+            Instantiate(glass, transform.position, transform.rotation);
+            if (transform.parent != null)
+                Destroy(transform.parent.gameObject);
+            Debug.Log("broken");
+        }
+    }
 }

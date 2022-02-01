@@ -15,17 +15,17 @@ public class level : MonoBehaviour
     private void Update()
     {
         noofbottle = unbroken.transform.childCount;
-        ballcount = balls.transform.childCount;
+       // ballcount = balls.transform.childCount;
         if (noofbottle<=0&&!gameovercheck)
         {
             StartCoroutine(gameover());
             gameovercheck = true;
         }
-        if(ballcount<=0)
-        {
-            FindObjectOfType<Gamemanager>().gamefalied();
+        //if(ballcount<=0)
+        //{
+        //    FindObjectOfType<Gamemanager>().gamefalied();
            
-        }
+        //}
     }
     IEnumerator gameover()
     {
