@@ -12,7 +12,7 @@ public class gun : MonoBehaviour
     public float recoilPower = 1;
     public float range = 100;
     public LayerMask layer;
-
+    public ParticleSystem muzzle;
     public AudioClip shootSound;
     public float shootVolume = 1f;
     public GameObject guideline;
@@ -25,13 +25,22 @@ public class gun : MonoBehaviour
 
     public void Shoot()
     {
-        //Play the audio sound
-        if (shootSound)
-            AudioSource.PlayClipAtPoint(shootSound, transform.position, shootVolume);
-
-       GameObject bt=  Instantiate(bullet, barrelTip.position, Quaternion.identity);
-        bt.GetComponent<Rigidbody>().AddForce(transform.right * hitPower,ForceMode.Impulse);
-        body.AddForce(barrelTip.transform.up * recoilPower * 5, ForceMode.Impulse);
+        if(Gamemanager.bulletcount>0)
+        {
+            //Play the audio sound
+            if (shootSound)
+                AudioSource.PlayClipAtPoint(shootSound, transform.position, shootVolume);
+            if(FindObjectOfType<Gamemanager>().canshoot)
+            {
+                FindObjectOfType<level>().Bulletcount--;
+            }
+        
+            muzzle.Play();
+            GameObject bt = Instantiate(bullet, barrelTip.position, Quaternion.identity);
+            bt.GetComponent<Rigidbody>().AddForce(transform.right * hitPower, ForceMode.Impulse);
+            body.AddForce(barrelTip.transform.up * recoilPower * 5, ForceMode.Impulse);
+        }
+    
     }
     public void drawguide()
     {
