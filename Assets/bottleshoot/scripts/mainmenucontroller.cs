@@ -9,8 +9,8 @@ public class mainmenucontroller : MonoBehaviour
 {
 
 
-    public GameObject mainscreen, exitpanel, levelpanel, optionpanel,backbutton;
-    public TextMeshProUGUI currentpanel;
+    public GameObject mainscreen, exitpanel, levelpanel, optionpanel,backbutton,demolevelindicator;
+    public TextMeshProUGUI currentpanel,playerprefscheck;
     public void play()
     {
         SceneManager.LoadScene("game");
@@ -48,5 +48,14 @@ public class mainmenucontroller : MonoBehaviour
             currentpanel.text = "OPTIONS ";
             backbutton.SetActive(true);
         }
+
+
+        playerprefscheck.text = PlayerPrefs.GetString("demo");
     }
+
+    public void demolevelunlockinfo()
+    {
+        demolevelindicator.SetActive(true);
+    }
+
 }

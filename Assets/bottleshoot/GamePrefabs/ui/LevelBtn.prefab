@@ -287,6 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelnoLabel: {fileID: 3615399309358673477}
   completed: {fileID: 1495758957570622035}
+  buy: {fileID: 0}
   Lock: {fileID: 1401346671767835322}
   starImgs:
   - {fileID: 7851767991682847121}

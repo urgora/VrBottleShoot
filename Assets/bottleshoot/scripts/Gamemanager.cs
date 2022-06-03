@@ -7,11 +7,11 @@ using TMPro;
 public class Gamemanager : MonoBehaviour
 {
    
-    public GameObject levelfinished,levelfaled,star,gameoverpanel,objectivepanel,pausepanel,bottleandtimerindicator;
+    public GameObject levelfinished,levelfaled,star,gameoverpanel,objectivepanel,pausepanel,bottleandtimerindicator,nextbutton;
     public GameObject  normal, xrrig,player;
     public GameObject[] levels,playerposition;
     public static float timer, bulletcount,currentbottlecount;
-    public TextMeshProUGUI timertext, bulletcountertext,bullettextobjectivepanel,bottletextobjectivepanel,timetextobjectivepanel,gunbulletcounter,levelwinorloss,levelnumber,timerdisplay,bottlecount;
+    public TextMeshProUGUI timertext, bulletcountertext,bullettextobjectivepanel,bottletextobjectivepanel,timetextobjectivepanel,gunbulletcounter,levelwinorloss,levelnumber,timerdisplay,bottlecount,delayedtimer;
     public bool testing,gamestarted,canshoot;
     public int currentlevel;
     public float percentage,totalbt,totalbottle;
@@ -44,12 +44,22 @@ public class Gamemanager : MonoBehaviour
             }
         }
         levelnumber.text = " LEVEL " + (currentlevel + 1) ;
-       
 
+        StartCoroutine(delayedplaygame());
         //Instantiate(levels[currentlevel], transform.position, transform.rotation);
     }
 
-
+    IEnumerator delayedplaygame()
+    {
+        int timer = 5;
+        while(timer>0)
+        {
+            yield return new WaitForSeconds(1f);
+            timer--;
+            delayedtimer.text = "Game Starts in " + timer + " sec";
+        }
+        startgame();
+    }
     public void startobjectivepanelupdate(string bullet,string bottle, string time)
     {
         bullettextobjectivepanel.text = bullet;
@@ -163,9 +173,24 @@ public class Gamemanager : MonoBehaviour
 
 
 
+        if (PlayerPrefs.GetString("demo") == "demo")
+        {
+            if((currentlevel+1)<5)
+            {
+                increaselevel();
+            }
+            else
+            {
+                nextbutton.SetActive(false);
+            }
+        }
+        else if (PlayerPrefs.GetString("demo") == "lvlunlocked")
+        {
+            increaselevel();
+        }
 
 
-        increaselevel();
+        
     }
     public void gamefalied()
     {
@@ -194,9 +219,24 @@ public class Gamemanager : MonoBehaviour
     }
     public void replay()
     {
-        int i = PlayerPrefs.GetInt("level") - 1;
-        PlayerPrefs.SetInt("level", i);
-        reload();
+        if (PlayerPrefs.GetString("demo") == "demo")
+        {
+            if((currentlevel+1)<5)
+            {
+                int i = PlayerPrefs.GetInt("level") - 1;
+                PlayerPrefs.SetInt("level", i);
+                reload();
+            }
+            else if( (currentlevel + 1) == 5)
+            reload();
+        }
+        else if (PlayerPrefs.GetString("demo") == "lvlunlocked")
+        {
+            int i = PlayerPrefs.GetInt("level") - 1;
+            PlayerPrefs.SetInt("level", i);
+            reload();
+        }
+     
     }
     public void home()
     {

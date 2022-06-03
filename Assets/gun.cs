@@ -50,4 +50,9 @@ public class gun : MonoBehaviour
     {
         guideline.SetActive(false);
     }
+
+    public void gungrabbed()
+    {
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+    }
 }
