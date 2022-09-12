@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Oculus.Platform;
+using Oculus.Platform.Models;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 public class Gamemanager : MonoBehaviour
 {
    
-    public GameObject levelfinished,levelfaled,star,gameoverpanel,objectivepanel,pausepanel,bottleandtimerindicator,nextbutton;
+    public GameObject levelfinished,levelfaled,star,gameoverpanel,objectivepanel,pausepanel,bottleandtimerindicator,nextbutton,shopbutton,shoppanel;
     public GameObject  normal, xrrig,player;
     public GameObject[] levels,playerposition;
     public static float timer, bulletcount,currentbottlecount;
@@ -181,6 +183,7 @@ public class Gamemanager : MonoBehaviour
             }
             else
             {
+                shopbutton.SetActive(true);
                 nextbutton.SetActive(false);
             }
         }
@@ -209,9 +212,44 @@ public class Gamemanager : MonoBehaviour
     //    {
     //        PlayerPrefs.SetInt("level", i + 1);
     //    }
-       
+
     //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     //}
+    public void Buycube()
+    {
+        //#if UNITY_EDITOR
+        //        PlayerPrefs.SetString("demo", "lvlunlocked");
+        //        buypanel.SetActive(false);
+        //        FindObjectOfType<levelselection>().deletechilds();
+        //        FindObjectOfType<levelselection>().levelshow();
+        //#endif
+        IAP.LaunchCheckoutFlow(sku: "levelunlocked").OnComplete(BuyCubeCallback);
+      //  Invoke("buysucess", 4);
+    }
+    void BuyCubeCallback(Message<Purchase> msg)
+    {
+        if (msg.IsError) return;
+        foreach (var purch in msg.GetPurchaseList())
+        {
+            // purchaseditem.text += $"{ purch.Sku}-{purch.GrantTime}\n";
+            if (purch.Sku == "levelunlocked")
+            {
+                string purchasedetail = "lvlunlocked";
+                PlayerPrefs.SetString("demo", purchasedetail);
+                nextbutton.SetActive(true);
+                shopbutton.SetActive(false);
+                shoppanel.SetActive(false);
+                //if (PlayerPrefs.GetInt("levelcompleted") == 4)
+                //{
+                //    PlayerPrefs.SetInt("levelcompleted", 5);
+                //}
+                //  sucess.SetActive(true);
+            }
+         
+        }
+
+
+    }
     public void reload()
     {
 

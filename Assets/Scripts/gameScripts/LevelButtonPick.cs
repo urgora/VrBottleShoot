@@ -41,6 +41,10 @@ public class LevelButtonPick : MonoBehaviour
             {
                 SoundManager.PlaySFX(lockaudio, false, 0);
                 //  _lock.Play();
+                if(PlayerPrefs.GetString("demo") == "demo")
+                {
+                 FindObjectOfType<mainmenucontroller>().showbuypanel();
+                }
             }
             else
             {

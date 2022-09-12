@@ -12,7 +12,7 @@ public class shopmanager : MonoBehaviour
     //public Text availableitem;
     [SerializeField]
     public TextMeshProUGUI purchaseditem;
-    public GameObject buypanel;
+    public GameObject buypanel, sucess, fail;
 
     public string[] skus = new[] { "gora", "holy" };
     void Start()
@@ -23,10 +23,10 @@ public class shopmanager : MonoBehaviour
             string purchasedetail = "demo";
             PlayerPrefs.SetString("demo", purchasedetail);
         }
-    
-        
-      //  Getprice();
-       GetPurchase();
+
+      //  PlayerPrefs.SetString("demo", "lvlunlocked");
+        //  Getprice();
+        GetPurchase();
     }
 
     void Getprice()
@@ -57,6 +57,8 @@ public class shopmanager : MonoBehaviour
             {
                 string purchasedetail = "lvlunlocked";
                 PlayerPrefs.SetString("demo", purchasedetail);
+
+              
             }
 
             //string purchasedetail = purch.Sku;
@@ -73,12 +75,12 @@ public class shopmanager : MonoBehaviour
 //        FindObjectOfType<levelselection>().deletechilds();
 //        FindObjectOfType<levelselection>().levelshow();
 //#endif
-          IAP.LaunchCheckoutFlow(sku: "levelunlocked").OnComplete(BuyCubeCallback);
-          Invoke("buysucess", 4);
+          IAP.LaunchCheckoutFlow(sku:"levelunlocked").OnComplete(BuyCubeCallback);
+         // Invoke("buysucess", 4);
     }
     void BuyCubeCallback(Message<Purchase> msg)
     {
-        //if (msg.IsError) return;
+        if (msg.IsError) return;
         foreach (var purch in msg.GetPurchaseList())
         {
             // purchaseditem.text += $"{ purch.Sku}-{purch.GrantTime}\n";
@@ -86,6 +88,16 @@ public class shopmanager : MonoBehaviour
             {
                 string purchasedetail = "lvlunlocked";
                 PlayerPrefs.SetString("demo", purchasedetail);
+                if (PlayerPrefs.GetInt("levelcompleted")==4)
+                {
+                    PlayerPrefs.SetInt("levelcompleted", 5);
+                }
+                sucess.SetActive(true);
+                
+            }
+            else
+            {
+                fail.SetActive(true);
             }
         }
 
@@ -93,8 +105,12 @@ public class shopmanager : MonoBehaviour
     }
     public void buysucess()
     {
-       
-        SceneManager.LoadScene("main");
+        levelselection lv = FindObjectOfType<levelselection>();
+        lv.deletechilds();
+        lv.levelshow();
+        sucess.SetActive(false);
+        fail.SetActive(false);
+        // SceneManager.LoadScene("main");
 
     }
 
