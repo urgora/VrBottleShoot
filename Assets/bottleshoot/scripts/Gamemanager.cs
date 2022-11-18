@@ -48,6 +48,12 @@ public class Gamemanager : MonoBehaviour
         levelnumber.text = " LEVEL " + (currentlevel + 1) ;
 
         StartCoroutine(delayedplaygame());
+
+        string eventname = "level" + (currentlevel + 1);
+        Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Start", PlayerPrefs.GetInt("levelstar" + (currentlevel + 1)));
+        Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelStart);
+
+ 
         //Instantiate(levels[currentlevel], transform.position, transform.rotation);
     }
 
@@ -61,6 +67,7 @@ public class Gamemanager : MonoBehaviour
             delayedtimer.text = "Game Starts in " + timer + " sec";
         }
         startgame();
+       
     }
     public void startobjectivepanelupdate(string bullet,string bottle, string time)
     {
@@ -191,9 +198,11 @@ public class Gamemanager : MonoBehaviour
         {
             increaselevel();
         }
+        string eventname = "level" + (currentlevel + 1);
+        Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Success", PlayerPrefs.GetInt("levelstar" + (currentlevel + 1)));
+        Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelEnd);
+        Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelUp);
 
-
-        
     }
     public void gamefalied()
     {
@@ -203,6 +212,10 @@ public class Gamemanager : MonoBehaviour
         levelfaled.SetActive(true);
         gamestarted = false;
         levelwinorloss.text = "LEVEL " + (currentlevel + 1) + " FAILED";
+
+        string eventname = "level" + (currentlevel + 1);
+        Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Failed",0);
+        Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelEnd);
         bottleandtimerindicator.SetActive(false);
     }
     //public void reload()

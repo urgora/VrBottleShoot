@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_android_client_id,@string/default_web_client_id">
+  <string name="gcm_defaultSenderId" translatable="false">770312661386</string>
+  <string name="google_storage_bucket" translatable="false">vrbottleshoot.appspot.com</string>
+  <string name="project_id" translatable="false">vrbottleshoot</string>
+  <string name="google_api_key" translatable="false">AIzaSyDcIq8YTIZD6pGRW3IVis6agR1__gmT_sI</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDcIq8YTIZD6pGRW3IVis6agR1__gmT_sI</string>
+  <string name="google_app_id" translatable="false">1:770312661386:android:6c3193559b1ad665d18073</string>
+  <string name="default_android_client_id" translatable="false">770312661386-aloe9rjoc9fsi4bjp6v71t4b4dn1o12j.apps.googleusercontent.com</string>
+  <string name="default_web_client_id" translatable="false">770312661386-2ibaqcr515ueb09r5vdk9s153qfvu5do.apps.googleusercontent.com</string>
+</resources>
