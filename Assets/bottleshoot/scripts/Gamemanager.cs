@@ -49,10 +49,8 @@ public class Gamemanager : MonoBehaviour
 
         StartCoroutine(delayedplaygame());
 
-        string eventname = "level" + (currentlevel + 1);
-        Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Start", PlayerPrefs.GetInt("levelstar" + (currentlevel + 1)));
-        Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelStart);
-
+        string eventname = "level_" + (currentlevel + 1) + "_Open";
+        flurryinstance.instance.levelstatus(eventname);
  
         //Instantiate(levels[currentlevel], transform.position, transform.rotation);
     }
@@ -198,11 +196,13 @@ public class Gamemanager : MonoBehaviour
         {
             increaselevel();
         }
-        string eventname = "level" + (currentlevel + 1);
-        Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Success", PlayerPrefs.GetInt("levelstar" + (currentlevel + 1)));
-        Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelEnd);
-        Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelUp);
+        //string eventname = "level" + (currentlevel + 1);
+        //Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Success", PlayerPrefs.GetInt("levelstar" + (currentlevel + 1)));
+        //Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelEnd);
+        //Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelUp);
 
+
+        flurryinstance.instance.Levelsucess((currentlevel + 1), star.GetComponent<starFxController>().ea);
     }
     public void gamefalied()
     {
@@ -213,9 +213,12 @@ public class Gamemanager : MonoBehaviour
         gamestarted = false;
         levelwinorloss.text = "LEVEL " + (currentlevel + 1) + " FAILED";
 
-        string eventname = "level" + (currentlevel + 1);
-        Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Failed",0);
-        Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelEnd);
+        //string eventname = "level" + (currentlevel + 1);
+        //Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Failed",0);
+        //Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelEnd);
+
+
+        flurryinstance.instance.Levelfail((currentlevel + 1));
         bottleandtimerindicator.SetActive(false);
     }
     //public void reload()

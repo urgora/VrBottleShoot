@@ -14,7 +14,7 @@ public class shopmanager : MonoBehaviour
     public TextMeshProUGUI purchaseditem;
     public GameObject buypanel, sucess, fail;
 
-    public string[] skus = new[] { "gora", "holy" };
+    public string[] skus = new[] { "Fullvertion" };
     void Start()
     {
 
@@ -53,7 +53,7 @@ public class shopmanager : MonoBehaviour
         foreach (var purch in msg.GetPurchaseList())
         {
             purchaseditem.text += $"{ purch.Sku}-{purch.GrantTime}\n";
-            if (purch.Sku == "levelunlocked")
+            if (purch.Sku == "Fullvertion")
             {
                 string purchasedetail = "lvlunlocked";
                 PlayerPrefs.SetString("demo", purchasedetail);
@@ -75,7 +75,7 @@ public class shopmanager : MonoBehaviour
 //        FindObjectOfType<levelselection>().deletechilds();
 //        FindObjectOfType<levelselection>().levelshow();
 //#endif
-          IAP.LaunchCheckoutFlow(sku:"levelunlocked").OnComplete(BuyCubeCallback);
+          IAP.LaunchCheckoutFlow(sku: "Fullvertion").OnComplete(BuyCubeCallback);
          // Invoke("buysucess", 4);
     }
     void BuyCubeCallback(Message<Purchase> msg)
@@ -84,7 +84,7 @@ public class shopmanager : MonoBehaviour
         foreach (var purch in msg.GetPurchaseList())
         {
             // purchaseditem.text += $"{ purch.Sku}-{purch.GrantTime}\n";
-            if (purch.Sku == "levelunlocked")
+            if (purch.Sku == "Fullvertion")
             {
                 string purchasedetail = "lvlunlocked";
                 PlayerPrefs.SetString("demo", purchasedetail);
@@ -93,11 +93,11 @@ public class shopmanager : MonoBehaviour
                     PlayerPrefs.SetInt("levelcompleted", 5);
                 }
                 sucess.SetActive(true);
-                
+                flurryinstance.instance.levelstatus("In_APP_Purchase__sucess");
             }
             else
             {
-                fail.SetActive(true);
+               // fail.SetActive(true);
             }
         }
 
