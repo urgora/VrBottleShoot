@@ -202,7 +202,9 @@ public class Gamemanager : MonoBehaviour
         //Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelUp);
 
 
-        flurryinstance.instance.Levelsucess((currentlevel + 1), star.GetComponent<starFxController>().ea);
+      //  flurryinstance.instance.Levelsucess((currentlevel + 1), star.GetComponent<starFxController>().ea);
+        string x = "Level_" + (currentlevel + 1) + "_Sucess";
+        flurryinstance.instance.levelstatus(x);
     }
     public void gamefalied()
     {
@@ -217,8 +219,8 @@ public class Gamemanager : MonoBehaviour
         //Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Failed",0);
         //Firebase.Analytics.FirebaseAnalytics.LogEvent(Firebase.Analytics.FirebaseAnalytics.EventLevelEnd);
 
-
-        flurryinstance.instance.Levelfail((currentlevel + 1));
+        string x = "Level_" + (currentlevel + 1) + "_Failed";
+        flurryinstance.instance.levelstatus(x);
         bottleandtimerindicator.SetActive(false);
     }
     //public void reload()
@@ -239,7 +241,7 @@ public class Gamemanager : MonoBehaviour
         //        FindObjectOfType<levelselection>().deletechilds();
         //        FindObjectOfType<levelselection>().levelshow();
         //#endif
-        IAP.LaunchCheckoutFlow(sku: "levelunlocked").OnComplete(BuyCubeCallback);
+        IAP.LaunchCheckoutFlow(sku: "Fullvertion").OnComplete(BuyCubeCallback);
       //  Invoke("buysucess", 4);
     }
     void BuyCubeCallback(Message<Purchase> msg)
@@ -248,7 +250,7 @@ public class Gamemanager : MonoBehaviour
         foreach (var purch in msg.GetPurchaseList())
         {
             // purchaseditem.text += $"{ purch.Sku}-{purch.GrantTime}\n";
-            if (purch.Sku == "levelunlocked")
+            if (purch.Sku == "Fullvertion")
             {
                 string purchasedetail = "lvlunlocked";
                 PlayerPrefs.SetString("demo", purchasedetail);

@@ -22,6 +22,7 @@ public class mainmenucontroller : MonoBehaviour
     }
     public void quit()
     {
+        flurryinstance.instance.levelstatus("App_Close");
         Application.Quit();
     }
     private void Update()
