@@ -69,13 +69,14 @@ public class shopmanager : MonoBehaviour
 
     public void Buycube()
     {
-//#if UNITY_EDITOR
-//        PlayerPrefs.SetString("demo", "lvlunlocked");
-//        buypanel.SetActive(false);
-//        FindObjectOfType<levelselection>().deletechilds();
-//        FindObjectOfType<levelselection>().levelshow();
-//#endif
-          IAP.LaunchCheckoutFlow(sku: "Fullvertion").OnComplete(BuyCubeCallback);
+        //#if UNITY_EDITOR
+        //        PlayerPrefs.SetString("demo", "lvlunlocked");
+        //        buypanel.SetActive(false);
+        //        FindObjectOfType<levelselection>().deletechilds();
+        //        FindObjectOfType<levelselection>().levelshow();
+        //#endif
+        flurryinstance.instance.levelstatus("IAP_attempt");
+        IAP.LaunchCheckoutFlow(sku: "Fullvertion").OnComplete(BuyCubeCallback);
          // Invoke("buysucess", 4);
     }
     void BuyCubeCallback(Message<Purchase> msg)
@@ -93,7 +94,7 @@ public class shopmanager : MonoBehaviour
                     PlayerPrefs.SetInt("levelcompleted", 5);
                 }
                 sucess.SetActive(true);
-                flurryinstance.instance.levelstatus("In_APP_Purchase__sucess");
+                flurryinstance.instance.levelstatus("IAP__sucess");
             }
             else
             {

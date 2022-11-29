@@ -39,17 +39,7 @@ public class flurryinstance : MonoBehaviour
         // Flurry.EventRecordStatus LogEvent(string eventId);
         levelstatus("App_open");
     }
-    public void onclick()
-    {
-        Flurry.EventRecordStatus status;
-        Flurry.LogEvent("working");
-        status = Flurry.LogEvent(Flurry.Event.LEVEL_STARTED);
-
-        PlayerPrefs.SetInt("x", (PlayerPrefs.GetInt("x") + 1));
-        string x = "" + PlayerPrefs.GetInt("x");
-        Dictionary<string, string> paramsDict = new Dictionary<string, string>() { { "preessed", "x" } };
-        status = Flurry.LogEvent("Unity Event", paramsDict);
-    }
+  
     public void levelstatus(string levelstatustext)
     {
         Flurry.EventRecordStatus status;
@@ -58,25 +48,13 @@ public class flurryinstance : MonoBehaviour
 
     public void openlevelapppurchase()
     {
-        Flurry.EventRecordStatus status;
-        status = Flurry.LogEvent("In_App_purchase__opened");
+        levelstatus("IAP_open");
     }
-  
-    public void Levelsucess(int levelnumber,int star)
+    public void IAPclose()
     {
-        Flurry.EventRecordStatus status;
-        IDictionary<string, string> parameters = new Dictionary<string, string>();
-        parameters.Add("Level number", levelnumber.ToString());
-        parameters.Add("Star Count", star.ToString());
-        status = Flurry.LogEvent("Level Sucess", parameters);
+        levelstatus("IAP_Close");
     }
-    public void Levelfail(int levelnumber)
-    {
-        Flurry.EventRecordStatus status;
-        IDictionary<string, string> parameters = new Dictionary<string, string>();
-        parameters.Add("Level number", levelnumber.ToString());
-        status = Flurry.LogEvent("Level Failed", parameters);
-    }
+
 
 
 

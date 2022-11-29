@@ -60,6 +60,7 @@ public class mainmenucontroller : MonoBehaviour
     }
     public void showbuypanel()
     {
+      
         demolevelindicator.SetActive(true);
     }
 
