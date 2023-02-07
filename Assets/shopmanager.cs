@@ -13,6 +13,7 @@ public class shopmanager : MonoBehaviour
     [SerializeField]
     public TextMeshProUGUI purchaseditem;
     public GameObject buypanel, sucess, fail;
+   
 
     public string[] skus = new[] { "Fullvertion" };
     void Start()
@@ -94,6 +95,7 @@ public class shopmanager : MonoBehaviour
                     PlayerPrefs.SetInt("levelcompleted", 5);
                 }
                 sucess.SetActive(true);
+
                 flurryinstance.instance.levelstatus("IAP__sucess");
             }
             else

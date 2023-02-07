@@ -5,22 +5,38 @@ using Oculus.Platform.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Networking;
+using SimpleJSON;
 using UnityEngine.SceneManagement;
 public class Gamemanager : MonoBehaviour
 {
-   
+    [Header("App price")]
+    public string fullvertionprice;
+    [Header("Unlocked level")]
+    public int unlockedlevels;
+
     public GameObject levelfinished,levelfaled,star,gameoverpanel,objectivepanel,pausepanel,bottleandtimerindicator,nextbutton,shopbutton,shoppanel;
     public GameObject  normal, xrrig,player;
     public GameObject[] levels,playerposition;
     public static float timer, bulletcount,currentbottlecount;
-    public TextMeshProUGUI timertext, bulletcountertext,bullettextobjectivepanel,bottletextobjectivepanel,timetextobjectivepanel,gunbulletcounter,levelwinorloss,levelnumber,timerdisplay,bottlecount,delayedtimer;
+    public TextMeshProUGUI timertext, bulletcountertext,bullettextobjectivepanel,bottletextobjectivepanel,timetextobjectivepanel,gunbulletcounter,levelwinorloss,levelnumber,timerdisplay,bottlecount,delayedtimer,apppriceindicator;
     public bool testing,gamestarted,canshoot;
     public int currentlevel;
     public float percentage,totalbt,totalbottle;
-    
 
+    public Text test;
+    public static bool firstopen = false;
+    public GameObject checkentitlement;
     private void Start()
     {
+        if (!PlayerPrefs.HasKey("demo"))
+        {
+            PlayerPrefs.SetString("demo", "demo");
+        }
+        fullvertionprice = "4.99";
+        unlockedlevels = 15;
+        //  PlayerPrefs.SetInt("level", 16);
+        StartCoroutine(gettournament());
         normal.SetActive(false);
         xrrig.SetActive(true);
         objectivepanel.SetActive(true);
@@ -29,7 +45,7 @@ public class Gamemanager : MonoBehaviour
         //PlayerPrefs.DeleteAll();
         if (!testing)
         {
-            currentlevel = PlayerPrefs.GetInt("level", 0);
+            currentlevel = PlayerPrefs.GetInt("level",0);
         }
 
         for (int i = 0; i < levels.Length; i++)
@@ -51,9 +67,21 @@ public class Gamemanager : MonoBehaviour
 
         string eventname = "level_" + (currentlevel + 1) + "_Open";
         flurryinstance.instance.levelstatus(eventname);
- 
+        if (!firstopen)
+            firstopenfunction();
+
+        apppriceindicator.text = "Buy Full Version              ($ " + fullvertionprice + " )";
         //Instantiate(levels[currentlevel], transform.position, transform.rotation);
     }
+    public void firstopenfunction()
+    {
+        checkentitlement.GetComponent<appentilementcheck>().cancheck();
+       flurryinstance.instance.levelstatus("App_open");
+      //  GetPurchase();
+        firstopen = true;
+    }
+    
+
 
     IEnumerator delayedplaygame()
     {
@@ -98,7 +126,7 @@ public class Gamemanager : MonoBehaviour
         timerdisplay.text = "" + minutes + ":" + seconds;
         bottlecount.text = "" + currentbottlecount + "/" + totalbottle;
 
-
+        test.text =" " +PlayerPrefs.GetInt("level")+"    " + PlayerPrefs.GetString("demo");
     }
     public void startgame()
     {
@@ -119,7 +147,7 @@ public class Gamemanager : MonoBehaviour
             levelfinished.SetActive(true);
             gamestarted = false;
             bottleandtimerindicator.SetActive(false);
-            levelwinorloss.text = "LEVEL " + (currentlevel + 1) + " COMPLATED";
+            levelwinorloss.text = "LEVEL " + (currentlevel + 1) + " COMPLETED";
 
         if(bulletcount>=((totalbt-totalbottle)))
         {
@@ -179,22 +207,29 @@ public class Gamemanager : MonoBehaviour
         //}
 
 
-
-        if (PlayerPrefs.GetString("demo") == "demo")
+        Debug.Log("executed");
+        if (PlayerPrefs.GetString("demo") == "lvlunlocked")
         {
-            if((currentlevel+1)<5)
+            print("full");
+            increaselevel();
+            shopbutton.SetActive(false);
+        }
+     //   if(PlayerPrefs.GetString("demo")== "lvlunlocked")
+        else
+        {
+            print("demo");
+            if ((currentlevel + 1) < unlockedlevels)
             {
                 increaselevel();
+                print("demo");
             }
             else
             {
+                print("demo");
                 shopbutton.SetActive(true);
                 nextbutton.SetActive(false);
             }
-        }
-        else if (PlayerPrefs.GetString("demo") == "lvlunlocked")
-        {
-            increaselevel();
+      
         }
         //string eventname = "level" + (currentlevel + 1);
         //Firebase.Analytics.FirebaseAnalytics.LogEvent(eventname, "Success", PlayerPrefs.GetInt("levelstar" + (currentlevel + 1)));
@@ -233,8 +268,44 @@ public class Gamemanager : MonoBehaviour
 
     //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     //}
+    void GetPurchase()
+    {
+        IAP.GetViewerPurchases().OnComplete(GetPurchasesCallback);
+    }
+
+    private void GetPurchasesCallback(Message<PurchaseList> msg)
+    {
+        if (msg.IsError) return;
+        foreach (var purch in msg.GetPurchaseList())
+        {
+            //purchaseditem.text += $"{ purch.Sku}-{purch.GrantTime}\n";
+            if (purch.Sku == "Fullvertion")
+            {
+                string purchasedetail = "lvlunlocked";
+                PlayerPrefs.SetString("demo", purchasedetail);
+
+
+            }
+
+            //string purchasedetail = purch.Sku;
+            //PlayerPrefs.SetString("demo", purchasedetail);
+            //buypanel.SetActive(false);
+        }
+    }
+    public void iapopen(bool opened)
+    {
+        if(opened)
+        {
+            flurryinstance.instance.levelstatus("IAP__Open");
+        }
+        else
+        {
+            flurryinstance.instance.levelstatus("IAP__Close");
+        }
+    }
     public void Buycube()
     {
+        flurryinstance.instance.levelstatus("IAP__Attempt");
         //#if UNITY_EDITOR
         //        PlayerPrefs.SetString("demo", "lvlunlocked");
         //        buypanel.SetActive(false);
@@ -254,9 +325,17 @@ public class Gamemanager : MonoBehaviour
             {
                 string purchasedetail = "lvlunlocked";
                 PlayerPrefs.SetString("demo", purchasedetail);
-                nextbutton.SetActive(true);
-                shopbutton.SetActive(false);
-                shoppanel.SetActive(false);
+              //  nextbutton.SetActive(true);
+               // shopbutton.SetActive(false);
+              //  shoppanel.SetActive(false);
+                //if (PlayerPrefs.GetInt("levelcompleted") == 4)
+                //{
+                //    PlayerPrefs.SetInt("levelcompleted", 5);
+                //}
+                increaselevel();
+
+                flurryinstance.instance.levelstatus("IAP__sucess");
+                reload();
                 //if (PlayerPrefs.GetInt("levelcompleted") == 4)
                 //{
                 //    PlayerPrefs.SetInt("levelcompleted", 5);
@@ -270,8 +349,7 @@ public class Gamemanager : MonoBehaviour
     }
     public void reload()
     {
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void replay()
     {
@@ -300,14 +378,51 @@ public class Gamemanager : MonoBehaviour
     }
     public void increaselevel()
     {
+        int i = PlayerPrefs.GetInt("level") + 1;
+      //  print(i);
+      //  PlayerPrefs.SetString("demo", "lvlunlocked");
+        PlayerPrefs.SetInt("level", i);
         if (PlayerPrefs.GetInt("level") < levels.Length - 1)
         {
-            int i = PlayerPrefs.GetInt("level") + 1;
-            PlayerPrefs.SetInt("level", i);
+           
             if (PlayerPrefs.GetInt("level") >= PlayerPrefs.GetInt("levelcompleted"))
             {
                 PlayerPrefs.SetInt("levelcompleted", i);
             }
         }
     }
+    public void quit()
+    {
+        flurryinstance.instance.levelstatus("App_Close");
+        UnityEngine.Application.Quit();
+    }
+    IEnumerator gettournament()
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get("https://puzzle-games-d9a78.firebaseapp.com/FootballConfig.json"))
+        {
+
+            yield return webRequest.SendWebRequest();
+            if (webRequest.isNetworkError)
+            {
+              //  loader.SetActive(false);
+                Debug.Log(": Error: " + webRequest.error);
+              //  tournament_get();
+            }
+            else
+            {
+
+
+                JSONNode jsonNode = SimpleJSON.JSON.Parse(webRequest.downloadHandler.text);
+                fullvertionprice = jsonNode["IAP_Price"].Value;
+                string lvl = jsonNode["IAP_Level"].Value;
+                unlockedlevels = int.Parse( lvl);
+
+                print(jsonNode["IAP_Level"].Value);
+                print(jsonNode["IAP_Price"].Value);
+
+                apppriceindicator.text = "Buy Full Version              ($ " + fullvertionprice + " )";
+            }
+        }
+    }
+
 }

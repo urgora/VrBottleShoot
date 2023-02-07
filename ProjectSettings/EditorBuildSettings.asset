@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/bottleshoot/scene/main.unity
-    guid: 15575604865440a4186a516be9c0c054
-  - enabled: 1
     path: Assets/bottleshoot/scene/game.unity
     guid: 7bcc426dcb51b444cb510908f3896071
   m_configObjects:

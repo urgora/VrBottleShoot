@@ -37,7 +37,7 @@ public class flurryinstance : MonoBehaviour
         // Flurry.EventRecordStatus LogEvent("open",paramsDict.ToString()); 
 
         // Flurry.EventRecordStatus LogEvent(string eventId);
-        levelstatus("App_open");
+       
     }
   
     public void levelstatus(string levelstatustext)
